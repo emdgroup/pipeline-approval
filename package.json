@@ -1,8 +1,9 @@
 {
-  "name": "emdscholar-web",
+  "name": "pipeline-changesets-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aws-sdk": "^2.309.0",
     "bootstrap": "^4.1.1",
     "corejs": "^1.0.0",
     "prop-types": "^15.6.2",
