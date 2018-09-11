@@ -23,7 +23,7 @@ const Table = ({ headers, data, renderData, render }) => {
               <tr className="empty-collection text-center">
                 <td colSpan="8">
                   {render && (data && isArrayEmpty(data)) ? (
-                    <div className="empty-collection">No data found</div>
+                    <div className="empty-collection">No changes found</div>
                   ) : null}
                 </td>
               </tr>

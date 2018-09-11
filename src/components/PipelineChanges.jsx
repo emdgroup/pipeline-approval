@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import CodePipeline from 'aws-sdk/clients/codepipeline';
 import ChangeSets from './ChangeSets';
 import Collapse from './Collapse';
 import { Modal, ModalBody, ModalFooter, Button } from './Modal';
-
-const S3 = require('aws-sdk/clients/s3');
-const CodePipeline = require('aws-sdk/clients/codepipeline');
+import ParameterDiff from './ParameterDiff';
 
 const RejectModal = ({ handleKey, close, onClick }) => (
-  <Modal title="Reject Stack Reason" onClose={close}>
+  <Modal title="Reject Reason" onClose={close}>
     <ModalBody>
       <textarea
         className="form-control w-100"
@@ -20,10 +19,10 @@ const RejectModal = ({ handleKey, close, onClick }) => (
     </ModalBody>
     <ModalFooter>
       <Button onClick={close} look="light">
-        Close
+        Cancel
       </Button>
-      <Button onClick={onClick} look="primary">
-        Submit
+      <Button onClick={onClick} look="danger">
+        Reject
       </Button>
     </ModalFooter>
   </Modal>
@@ -32,71 +31,70 @@ const RejectModal = ({ handleKey, close, onClick }) => (
 RejectModal.propTypes = {
   handleKey: PropTypes.func,
   close: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 RejectModal.defaultProps = {
   handleKey: () => {},
   close: () => {},
-  onClick: () => {}
+  onClick: () => {},
 };
 
 class PipelineChanges extends Component {
   state = {
     rejectStack: null,
-    rejectReason: null
+    rejectReason: null,
   };
 
   componentDidMount() {
     const { changes } = this.props;
-    // Set credentials and region
-    const s3 = new S3({
+    // // Set credentials and region
+    this.pipeline = new CodePipeline({
       region: 'eu-west-1',
       credentials: {
         accessKeyId: changes.Credentials.AccessKeyId,
         secretAccessKey: changes.Credentials.SecretAccessKey,
-        sessionToken: changes.Credentials.SessionToken
-      }
+        sessionToken: changes.Credentials.SessionToken,
+      },
     });
   }
 
   onClickAccept = () => {
     const { changes } = this.props;
-    const pipeline = new CodePipeline();
-    pipeline.putJobSuccessResult(
+    this.pipeline.putJobSuccessResult(
       {
-        jobId: changes.PipelineId.JobId
+        jobId: changes.PipelineId.JobId,
       },
       (err, data) => {
         if (err) console.log(err, err.stack);
         else console.log('Success', data);
-      }
+      },
     );
   };
 
   onClickReject = () => {
     const { rejectReason } = this.state;
     const { changes } = this.props;
-    const pipeline = new CodePipeline();
 
-    pipeline.putJobFailureResult(
+    this.pipeline.putJobFailureResult(
       {
         failureDetails: {
           message: rejectReason,
-          type: 'JobFailed'
+          type: 'JobFailed',
         },
-        jobId: changes.PipelineId.JobId
+        jobId: changes.PipelineId.JobId,
       },
       (err, data) => {
         if (err) console.log(err, err.stack);
         else console.log('Reject', data);
-      }
+      },
     );
   };
 
   format = text => (
     <div
-      className={text.indexOf('-') === 0 ? 'red' : 'green'}
+      key={text}
+      className={text.indexOf('-') === 0 ? 'oldValue' : 'newValue'}
       dangerouslySetInnerHTML={{ __html: text }}
     />
   );
@@ -124,18 +122,17 @@ class PipelineChanges extends Component {
               <h4>{diff.StackName}</h4>
               <Collapse>
                 <div label="ChangeSets" isOpen>
-                  <ChangeSets
-                    key={diff.StackName}
-                    set={diff.ChangeSets}
-                    credentials={changes.Credentials}
-                    pipelineId={changes.PipelineId}
-                  />
+                  <ChangeSets key={diff.StackName} set={diff.ChangeSets} />
                 </div>
                 <div label="ParameterDiff">
-                  <pre>{diff.ParameterDiff.split('\n').map(this.format)}</pre>
+                  <ParameterDiff key={diff.StackName} set={diff.ParameterDiff} />
                 </div>
                 <div label="TemplateDiff">
-                  <pre>{diff.TemplateDiff.split('\n').map(this.format)}</pre>
+                  {diff.TemplateDiff ? (
+                    <pre>{diff.TemplateDiff.split('\n').map(this.format)}</pre>
+                  ) : (
+                    <div className="empty-collection">No changes found</div>
+                  )}
                 </div>
               </Collapse>
               <hr />
@@ -158,11 +155,11 @@ class PipelineChanges extends Component {
 }
 
 PipelineChanges.propTypes = {
-  changes: PropTypes.objectOf(PropTypes.any)
+  changes: PropTypes.objectOf(PropTypes.any),
 };
 
 PipelineChanges.defaultProps = {
-  changes: {}
+  changes: {},
 };
 
 export default PipelineChanges;

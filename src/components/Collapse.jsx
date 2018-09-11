@@ -35,7 +35,7 @@ CollapseBody.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   isOpen: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 class Collapse extends Component {
@@ -58,8 +58,8 @@ class Collapse extends Component {
 
     this.setState({
       openSections: {
-        [label]: !isOpen
-      }
+        [label]: !isOpen,
+      },
     });
   };
 
@@ -85,7 +85,7 @@ class Collapse extends Component {
 }
 
 Collapse.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
 export default Collapse;

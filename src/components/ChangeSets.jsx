@@ -2,9 +2,11 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Table from './Table';
 
+const emptyValue = '-';
+
 const ChangeSetsTableData = (data) => {
-  const getBadge = (state) => {
-    switch (state) {
+  const getBadge = (action) => {
+    switch (action) {
       case 'Add':
         return 'badge-success';
       case 'Remove':
@@ -12,7 +14,7 @@ const ChangeSetsTableData = (data) => {
       case 'Modify':
         return 'badge-warning';
       default:
-        return 'badge-warning';
+        return 'badge-light';
     }
   };
   return (
@@ -26,15 +28,21 @@ const ChangeSetsTableData = (data) => {
       <tr key={data.ResourceChange.PhysicalResourceId + data.ResourceChange.ResourceType}>
         <td>
           <span className={`badge ${getBadge(data.ResourceChange.Action)}`}>
-            {data.ResourceChange.Action}
+            {data.ResourceChange.Action ? data.ResourceChange.Action : emptyValue}
           </span>
         </td>
-        <td>{data.ResourceChange.LogicalResourceId}</td>
         <td>
-          {data.ResourceChange.PhysicalResourceId ? data.ResourceChange.PhysicalResourceId : null}
+          {data.ResourceChange.LogicalResourceId
+            ? data.ResourceChange.LogicalResourceId
+            : emptyValue}
         </td>
-        <td>{data.ResourceChange.ResourceType}</td>
-        <td>{data.ResourceChange.Replacement ? data.ResourceChange.Replacement : null}</td>
+        <td>
+          {data.ResourceChange.PhysicalResourceId
+            ? data.ResourceChange.PhysicalResourceId
+            : emptyValue}
+        </td>
+        <td>{data.ResourceChange.ResourceType ? data.ResourceChange.ResourceType : emptyValue}</td>
+        <td>{data.ResourceChange.Replacement ? data.ResourceChange.Replacement : emptyValue}</td>
       </tr>
     </Fragment>
   );

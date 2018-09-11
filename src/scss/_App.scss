@@ -25,11 +25,17 @@ body {
   }
 }
 
-.red {
+.empty-collection {
+  color: $gray-700;
+  text-align: center;
+  font-size: 20px;
+}
+
+.oldValue {
   color: red;
 }
 
-.green {
+.newValue {
   color: green;
 }
 

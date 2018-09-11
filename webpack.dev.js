@@ -26,6 +26,7 @@ module.exports = merge(common, {
   plugins: [
     new webpack.DefinePlugin({
       DEVELOPMENT: true,
+      RELATIVE_PUBLIC_PATH: false,
       AWS_ACCESS_KEY_ID: JSON.stringify(AWS_ACCESS_KEY_ID),
       AWS_SECRET_ACCESS_KEY: JSON.stringify(AWS_SECRET_ACCESS_KEY),
       AWS_SESSION_TOKEN: JSON.stringify(AWS_SESSION_TOKEN),
