@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import CodePipeline from 'aws-sdk/clients/codepipeline';
 import ChangeSets from './ChangeSets';
 import Collapse from './Collapse';
@@ -44,30 +45,39 @@ RejectModal.defaultProps = {
 class PipelineChanges extends Component {
   state = {
     diff: null,
+    redirect: null,
     rejectStack: null,
     rejectReason: null,
   };
 
+  // https://pipeline-changesets.hcie.io/app-pipeline-test-artifacts-xgyu8fbefksy/Gateway/samplechangeset.json?signature=123123123
   componentDidMount() {
-    const { match } = this.props;
-    const bucket = match.params.bucket ? match.params.bucket : 'changesets';
-    const id = match.params.id ? match.params.id : 'diff';
-    request(`/${bucket}/${id}.json`, { method: 'GET' })
-      .then((diff) => {
-        this.setState({ diff });
-        // Set credentials and region
-        this.pipeline = new CodePipeline({
-          region: 'eu-west-1',
-          credentials: {
-            accessKeyId: diff.Credentials.AccessKeyId,
-            secretAccessKey: diff.Credentials.SecretAccessKey,
-            sessionToken: diff.Credentials.SessionToken,
-          },
-        });
+    const { location } = this.props;
+    // const bucket = match.params.bucket ? match.params.bucket : 'changesets';
+    // const id = match.params.id ? match.params.id : 'diff';
+    if (!location.state) {
+      const currentUrl = window.location.href;
+      request(currentUrl.replace('pipeline-changesets.hcie.io', 's3-eu-west-1.amazonaws.com'), {
+        method: 'GET',
       })
-      .catch((err) => {
-        console.log(err);
+        .then((diff) => {
+          this.setState({ diff, redirect: '/' });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      this.setState({ diff: location.state.diff });
+      const { diff } = this.state;
+      this.pipeline = new CodePipeline({
+        region: 'eu-west-1',
+        credentials: {
+          accessKeyId: diff.Credentials.AccessKeyId,
+          secretAccessKey: diff.Credentials.SecretAccessKey,
+          sessionToken: diff.Credentials.SessionToken,
+        },
       });
+    }
   }
 
   onClickAccept = () => {
@@ -119,7 +129,10 @@ class PipelineChanges extends Component {
   close = () => this.setState({ rejectStack: null });
 
   render() {
-    const { diff, rejectStack } = this.state;
+    const { diff, redirect, rejectStack } = this.state;
+    if (redirect) {
+      return <Redirect to={{ pathname: '/', state: { diff } }} />;
+    }
     if (diff) {
       return (
         <Fragment>
@@ -173,11 +186,13 @@ class PipelineChanges extends Component {
 PipelineChanges.propTypes = {
   changes: PropTypes.objectOf(PropTypes.any),
   match: PropTypes.objectOf(PropTypes.any),
+  location: PropTypes.objectOf(PropTypes.any),
 };
 
 PipelineChanges.defaultProps = {
   changes: {},
   match: null,
+  location: null,
 };
 
 export default PipelineChanges;
