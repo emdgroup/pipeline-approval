@@ -49,7 +49,10 @@ class PipelineChanges extends Component {
   };
 
   componentDidMount() {
-    request('/changesets/diff.json', { method: 'GET' })
+    const { match } = this.props;
+    const bucket = match.params.bucket ? match.params.bucket : 'changesets';
+    const id = match.params.id ? match.params.id : 'diff';
+    request(`/${bucket}/${id}.json`, { method: 'GET' })
       .then((diff) => {
         this.setState({ diff });
         // Set credentials and region
@@ -169,10 +172,12 @@ class PipelineChanges extends Component {
 
 PipelineChanges.propTypes = {
   changes: PropTypes.objectOf(PropTypes.any),
+  match: PropTypes.objectOf(PropTypes.any),
 };
 
 PipelineChanges.defaultProps = {
   changes: {},
+  match: null,
 };
 
 export default PipelineChanges;
