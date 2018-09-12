@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import CodePipeline from 'aws-sdk/clients/codepipeline';
 import ChangeSets from './ChangeSets';
 import Collapse from './Collapse';
@@ -45,39 +44,34 @@ RejectModal.defaultProps = {
 class PipelineChanges extends Component {
   state = {
     diff: null,
-    redirect: null,
     rejectStack: null,
     rejectReason: null,
   };
 
-  // https://pipeline-changesets.hcie.io/app-pipeline-test-artifacts-xgyu8fbefksy/Gateway/samplechangeset.json?signature=123123123
   componentDidMount() {
-    const { location } = this.props;
-    // const bucket = match.params.bucket ? match.params.bucket : 'changesets';
-    // const id = match.params.id ? match.params.id : 'diff';
-    if (!location.state) {
-      const currentUrl = window.location.href;
-      request(currentUrl.replace('pipeline-changesets.hcie.io', 's3-eu-west-1.amazonaws.com'), {
+    const { match, location } = this.props;
+    request(
+      `https://s3-eu-west-1.amazonaws.com/${match.params.bucket}/${location.key}/${match.params.id}.json${
+        location.search
+      }`,
+      {
         method: 'GET',
-      })
-        .then((diff) => {
-          this.setState({ diff, redirect: '/' });
-        })
-        .catch((err) => {
-          console.log(err);
+      },
+    )
+      .then((diff) => {
+        this.setState({ diff });
+        this.pipeline = new CodePipeline({
+          region: 'eu-west-1',
+          credentials: {
+            accessKeyId: diff.Credentials.AccessKeyId,
+            secretAccessKey: diff.Credentials.SecretAccessKey,
+            sessionToken: diff.Credentials.SessionToken,
+          },
         });
-    } else {
-      this.setState({ diff: location.state.diff });
-      const { diff } = this.state;
-      this.pipeline = new CodePipeline({
-        region: 'eu-west-1',
-        credentials: {
-          accessKeyId: diff.Credentials.AccessKeyId,
-          secretAccessKey: diff.Credentials.SecretAccessKey,
-          sessionToken: diff.Credentials.SessionToken,
-        },
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }
   }
 
   onClickAccept = () => {
@@ -129,10 +123,8 @@ class PipelineChanges extends Component {
   close = () => this.setState({ rejectStack: null });
 
   render() {
-    const { diff, redirect, rejectStack } = this.state;
-    if (redirect) {
-      return <Redirect to={{ pathname: '/', state: { diff } }} />;
-    }
+    const { diff, rejectStack } = this.state;
+
     if (diff) {
       return (
         <Fragment>

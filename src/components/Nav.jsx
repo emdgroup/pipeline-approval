@@ -6,7 +6,7 @@ const Nav = () => (
   <Switch>
     <Route
       exact
-      path="/:bucket?/:id?"
+      path="/:bucket?/:key?/:id?"
       render={props => <PipelineChanges {...props} />}
     />
   </Switch>
