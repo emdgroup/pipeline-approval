@@ -51,9 +51,9 @@ class PipelineChanges extends Component {
   componentDidMount() {
     const { match, location } = this.props;
     request(
-      `https://s3-eu-west-1.amazonaws.com/${match.params.bucket}/${location.key}/${match.params.id}.json${
-        location.search
-      }`,
+      `https://s3-eu-west-1.amazonaws.com/${match.params.bucket}/${match.params.key}/${
+        match.params.id
+      }.json${location.search}`,
       {
         method: 'GET',
       },
