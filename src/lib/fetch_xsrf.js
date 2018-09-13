@@ -3,7 +3,6 @@ export default function request(input, args = {}) {
     input,
     Object.assign({
       method: args.method || 'POST',
-      mode: 'no-cors',
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
