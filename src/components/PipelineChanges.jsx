@@ -75,10 +75,10 @@ class PipelineChanges extends Component {
   }
 
   onClickAccept = () => {
-    const { changes } = this.props;
+    const { diff } = this.state;
     this.pipeline.putJobSuccessResult(
       {
-        jobId: changes.PipelineId.JobId,
+        jobId: diff.PipelineId.JobId,
       },
       (err, data) => {
         if (err) console.log(err, err.stack);
@@ -89,7 +89,7 @@ class PipelineChanges extends Component {
 
   onClickReject = () => {
     const { rejectReason } = this.state;
-    const { changes } = this.props;
+    const { diff } = this.state;
 
     this.pipeline.putJobFailureResult(
       {
@@ -97,7 +97,7 @@ class PipelineChanges extends Component {
           message: rejectReason,
           type: 'JobFailed',
         },
-        jobId: changes.PipelineId.JobId,
+        jobId: diff.PipelineId.JobId,
       },
       (err, data) => {
         if (err) console.log(err, err.stack);
@@ -176,13 +176,11 @@ class PipelineChanges extends Component {
 }
 
 PipelineChanges.propTypes = {
-  changes: PropTypes.objectOf(PropTypes.any),
   match: PropTypes.objectOf(PropTypes.any),
   location: PropTypes.objectOf(PropTypes.any),
 };
 
 PipelineChanges.defaultProps = {
-  changes: {},
   match: null,
   location: null,
 };
