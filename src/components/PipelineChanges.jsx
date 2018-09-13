@@ -41,11 +41,33 @@ RejectModal.defaultProps = {
   onClick: () => {},
 };
 
+const ResponseModal = ({ response, close }) => (
+  <Modal title={response.title} onClose={close}>
+    <ModalBody>{response.message}</ModalBody>
+    <ModalFooter>
+      <Button onClick={close} look="light">
+        OK
+      </Button>
+    </ModalFooter>
+  </Modal>
+);
+
+ResponseModal.propTypes = {
+  response: PropTypes.objectOf(PropTypes.string),
+  close: PropTypes.func,
+};
+
+ResponseModal.defaultProps = {
+  response: null,
+  close: () => {},
+};
+
 class PipelineChanges extends Component {
   state = {
     diff: null,
     rejectStack: null,
     rejectReason: null,
+    response: null,
   };
 
   componentDidMount() {
@@ -81,8 +103,21 @@ class PipelineChanges extends Component {
         jobId: diff.PipelineId.JobId,
       },
       (err, data) => {
-        if (err) console.log(err, err.stack);
-        else console.log('Success', data);
+        if (err) {
+          this.setState({
+            response: {
+              message: `Unsuccessful: ${(err, err.stack)}.`,
+              title: 'Unsuccessful Accept Response',
+            },
+          });
+        } else {
+          this.setState({
+            response: {
+              message: `Success: Stack Accepted. ${data.status ? data.status : null}`,
+              title: 'Successful Accept Response',
+            },
+          });
+        }
       },
     );
   };
@@ -100,8 +135,21 @@ class PipelineChanges extends Component {
         jobId: diff.PipelineId.JobId,
       },
       (err, data) => {
-        if (err) console.log(err, err.stack);
-        else console.log('Reject', data);
+        if (err) {
+          this.setState({
+            response: {
+              message: `Unsuccessful: ${(err, err.stack)}.`,
+              title: 'Unsuccessful Reject Response',
+            },
+          });
+        } else {
+          this.setState({
+            response: {
+              message: `Success: Stack Rejected. ${data.status ? data.status : null}`,
+              title: 'Successful Reject Response',
+            },
+          });
+        }
       },
     );
   };
@@ -120,14 +168,15 @@ class PipelineChanges extends Component {
 
   openRejectStackModal = () => this.setState({ rejectStack: true });
 
-  close = () => this.setState({ rejectStack: null });
+  close = () => this.setState({ rejectStack: null, response: null });
 
   render() {
-    const { diff, rejectStack } = this.state;
+    const { diff, rejectStack, response } = this.state;
 
     if (diff) {
       return (
         <Fragment>
+          {response ? <ResponseModal close={this.close} response={response} /> : null}
           {rejectStack ? (
             <RejectModal
               close={this.close}
