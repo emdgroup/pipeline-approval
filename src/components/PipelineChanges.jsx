@@ -71,19 +71,14 @@ class PipelineChanges extends Component {
   };
 
   componentDidMount() {
-    const { match, location } = this.props;
-    request(
-      `https://s3-eu-west-1.amazonaws.com/${match.params.bucket}/${match.params.key}/${
-        match.params.id
-      }.json${location.search}`,
-      {
-        method: 'GET',
-      },
-    )
+    const { pathname, search } = document.location;
+    const bucket = pathname.split(/\//)[1];
+    const key = pathname.split(/\//).slice(2).join('/');
+    request(`https://${bucket}.s3.amazonaws.com/${key}${search}`)
       .then((diff) => {
         this.setState({ diff });
         this.pipeline = new CodePipeline({
-          region: 'eu-west-1',
+          region: 'eu-west-1', // TODO: region is not a constant. Needs to be added to diff.json
           credentials: {
             accessKeyId: diff.Credentials.AccessKeyId,
             secretAccessKey: diff.Credentials.SecretAccessKey,
