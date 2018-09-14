@@ -1,0 +1,86 @@
+{
+  "name": "pipeline-changesets-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.309.0",
+    "bootstrap": "^4.1.1",
+    "corejs": "^1.0.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "whatwg-fetch": "^2.0.4"
+  },
+  "sideEffects": false,
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "reporters": [
+      "default",
+      [
+        "./node_modules/jest-html-reporter",
+        {
+          "pageTitle": "Test Report",
+          "outputPath": "./reports/test-report.html"
+        }
+      ]
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/components/tests/mocks/fileMock.js",
+      "\\.(css|scss|less)$": "identity-obj-proxy"
+    }
+  },
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "analyze": "webpack --profile --json --config webpack.prod.js > dist/stats.json && webpack-bundle-analyzer dist/stats.json",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-env": "^7.0.0-0",
+    "@babel/preset-react": "^7.0.0-0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^8.2.5",
+    "babel-jest": "^23.4.0",
+    "babel-loader": "^8.0.0-beta",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "css-loader": "^0.28.11",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.10.0",
+    "exports-loader": "^0.7.0",
+    "genesis-dev-server": "github:emdgroup/genesis-dev-server",
+    "html-webpack-plugin": "^3.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "imports-loader": "^0.8.0",
+    "jest": "^23.4.0",
+    "jest-fetch-mock": "^1.6.5",
+    "jest-html-reporter": "^2.4.1",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.9.0",
+    "raw-loader": "^0.5.1",
+    "react-svg-loader": "^2.1.0",
+    "sass-loader": "^7.0.1",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.10.2",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2"
+  }
+}

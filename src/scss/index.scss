@@ -1,0 +1,34 @@
+// Custom Variables
+@import 'variables';
+
+// Required
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/variables';
+
+// Optional
+@import 'node_modules/bootstrap/scss/badge';
+@import 'node_modules/bootstrap/scss/buttons';
+@import 'node_modules/bootstrap/scss/button-group';
+@import 'node_modules/bootstrap/scss/card';
+@import 'node_modules/bootstrap/scss/close';
+@import 'node_modules/bootstrap/scss/grid';
+@import 'node_modules/bootstrap/scss/modal';
+@import 'node_modules/bootstrap/scss/reboot';
+@import 'node_modules/bootstrap/scss/tables';
+@import 'node_modules/bootstrap/scss/type';
+@import 'node_modules/bootstrap/scss/transitions';
+
+// Utilities
+@import 'node_modules/bootstrap/scss/utilities/align';
+@import 'node_modules/bootstrap/scss/utilities/borders';
+@import 'node_modules/bootstrap/scss/utilities/display';
+@import 'node_modules/bootstrap/scss/utilities/flex';
+@import 'node_modules/bootstrap/scss/utilities/float';
+@import 'node_modules/bootstrap/scss/utilities/position';
+@import 'node_modules/bootstrap/scss/utilities/sizing';
+@import 'node_modules/bootstrap/scss/utilities/spacing';
+@import 'node_modules/bootstrap/scss/utilities/text';
+
+// Components
+@import 'App';
