@@ -66,7 +66,6 @@ module.exports = {
         collapseWhitespace: true,
       },
       filename: 'index.html',
-      favicon: '../public/favicon.ico',
       template: 'index.ejs',
     }),
     new webpack.ProvidePlugin({

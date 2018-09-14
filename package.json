@@ -13,9 +13,6 @@
   },
   "sideEffects": false,
   "jest": {
-    "setupFiles": [
-      "./src/components/tests/setup.js"
-    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },
