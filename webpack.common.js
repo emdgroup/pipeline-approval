@@ -1,8 +1,5 @@
 const path = require('path');
 const HTML = require('html-webpack-plugin');
-const webpack = require('webpack');
-
-const { RELATIVE_PUBLIC_PATH } = process.env;
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -10,7 +7,6 @@ module.exports = {
   output: {
     filename: '[name].[hash].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: RELATIVE_PUBLIC_PATH ? '' : '/',
   },
   resolve: {
     alias: {

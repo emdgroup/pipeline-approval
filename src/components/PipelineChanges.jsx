@@ -71,13 +71,16 @@ class PipelineChanges extends Component {
   };
 
   componentDidMount() {
-    const { pathname, search } = document.location;
-    const bucket = pathname.split(/\//)[1];
-    const key = pathname
+    const { hash } = document.location;
+    const bucket = hash.split(/\//)[1];
+    const search = hash
+      .substring(hash.indexOf('?') + 1);
+    const key = hash
+      .substring(0, hash.indexOf('?'))
       .split(/\//)
       .slice(2)
       .join('/');
-    request(`https://${bucket}.s3.amazonaws.com/${key}${search}`)
+    request(`https://${bucket}.s3.amazonaws.com/${key}?${search}`)
       .then((diff) => {
         this.setState({ diff });
         this.pipeline = new CodePipeline({
