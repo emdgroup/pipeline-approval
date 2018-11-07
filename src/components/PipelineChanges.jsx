@@ -73,7 +73,10 @@ class PipelineChanges extends Component {
   componentDidMount() {
     const { pathname, search } = document.location;
     const bucket = pathname.split(/\//)[1];
-    const key = pathname.split(/\//).slice(2).join('/');
+    const key = pathname
+      .split(/\//)
+      .slice(2)
+      .join('/');
     request(`https://${bucket}.s3.amazonaws.com/${key}${search}`)
       .then((diff) => {
         this.setState({ diff });
@@ -168,54 +171,48 @@ class PipelineChanges extends Component {
   render() {
     const { diff, rejectStack, response } = this.state;
 
-    if (diff) {
-      return (
-        <Fragment>
-          {response ? <ResponseModal close={this.close} response={response} /> : null}
-          {rejectStack ? (
-            <RejectModal
-              close={this.close}
-              onClick={this.onClickReject}
-              handleKey={this.handleKey}
-            />
-          ) : null}
-          {diff.Changes
-            ? diff.Changes.map(change => (
-              <Fragment key={change.StackName + change.ChangeSets}>
-                <h4>{change.StackName}</h4>
-                <Collapse>
-                  <div label="ChangeSets" isOpen>
-                    <ChangeSets key={change.StackName} set={change.ChangeSets} />
-                  </div>
-                  <div label="ParameterDiff">
-                    <ParameterDiff key={change.StackName} set={change.ParameterDiff} />
-                  </div>
-                  <div label="TemplateDiff">
-                    {change.TemplateDiff ? (
-                      <pre>{change.TemplateDiff.split('\n').map(this.format)}</pre>
-                    ) : (
-                      <div className="empty-collection">No changes found</div>
-                    )}
-                  </div>
-                </Collapse>
-                <hr />
-              </Fragment>
-            ))
-            : null}
-          <div className="text-center fixed-bottom">
-            <div className="btn-group">
-              <button type="button" className="btn btn-success" onClick={this.onClickAccept}>
-                Accept Changes
-              </button>
-              <button type="button" className="btn btn-danger" onClick={this.openRejectStackModal}>
-                Reject Changes
-              </button>
-            </div>
+    if (!diff) return null;
+    return (
+      <Fragment>
+        {response ? <ResponseModal close={this.close} response={response} /> : null}
+        {rejectStack ? (
+          <RejectModal close={this.close} onClick={this.onClickReject} handleKey={this.handleKey} />
+        ) : null}
+        {diff.Changes
+          ? diff.Changes.map(change => (
+            <Fragment key={change.StackName + change.ChangeSets}>
+              <h4>{change.StackName}</h4>
+              <Collapse>
+                <div label="ChangeSets" isOpen>
+                  <ChangeSets key={change.StackName} set={change.ChangeSets} />
+                </div>
+                <div label="ParameterDiff">
+                  <ParameterDiff key={change.StackName} set={change.ParameterDiff} />
+                </div>
+                <div label="TemplateDiff">
+                  {change.TemplateDiff ? (
+                    <pre>{change.TemplateDiff.split('\n').map(this.format)}</pre>
+                  ) : (
+                    <div className="empty-collection">No changes found</div>
+                  )}
+                </div>
+              </Collapse>
+              <hr />
+            </Fragment>
+          ))
+          : null}
+        <div className="text-center fixed-bottom">
+          <div className="btn-group">
+            <button type="button" className="btn btn-success" onClick={this.onClickAccept}>
+              Accept Changes
+            </button>
+            <button type="button" className="btn btn-danger" onClick={this.openRejectStackModal}>
+              Reject Changes
+            </button>
           </div>
-        </Fragment>
-      );
-    }
-    return null;
+        </div>
+      </Fragment>
+    );
   }
 }
 
