@@ -1,0 +1,1 @@
+[![Build Status](https://img.shields.io/travis/emdgroup/pipeline-changes/master.svg?style=flat-square)](https://travis-ci.org/emdgroup/pipeline-changes) ![license](https://img.shields.io/badge/license-mit-blue.svg?style=flat-square)
