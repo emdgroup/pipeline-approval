@@ -1,8 +1,16 @@
 {
   "sourceMaps": true,
   "presets": [
-    ["@babel/preset-env", { "targets": { "ie": 11 } }],
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "targets": {
+          "ie": 11
+        }
+      }
+    ],
     "@babel/preset-react"
   ],
-  "plugins": ["transform-class-properties"]
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }

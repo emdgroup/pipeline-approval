@@ -6,15 +6,17 @@ const { RELATIVE_PUBLIC_PATH } = process.env;
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
-  entry: {
-    main: path.resolve(__dirname, 'src', 'index.jsx'),
-  },
+  entry: ['whatwg-fetch', path.resolve(__dirname, 'src', 'index.jsx')],
   output: {
     filename: '[name].[hash].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: RELATIVE_PUBLIC_PATH ? '' : '/',
   },
   resolve: {
+    alias: {
+      url: 'url-lite',
+      crypto: path.resolve(__dirname, 'src', 'lib', 'crypto'),
+    },
     extensions: ['.jsx', '.js', '.json', '.scss'],
     modules: [
       path.resolve(__dirname, 'src'),
@@ -67,10 +69,6 @@ module.exports = {
       },
       filename: 'index.html',
       template: 'index.ejs',
-    }),
-    new webpack.ProvidePlugin({
-      Promise: 'core-js/es6/promise',
-      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch',
     }),
   ],
   devServer: {
