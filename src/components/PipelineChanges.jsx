@@ -84,7 +84,7 @@ class PipelineChanges extends Component {
 
     if (!diff) return null;
 
-    const { Changes, Pipeline } = diff;
+    const { Stacks, Pipeline } = diff;
 
     return (
       <Suspense fallback="">
@@ -97,8 +97,8 @@ class PipelineChanges extends Component {
               handleKey={this.handleKey}
             />
           ) : null}
-          {Changes
-            ? Changes.map(({ StackName, TemplateDiff, ParameterDiff, OldTemplate, ChangeSets }) => (
+          {Stacks
+            ? Stacks.map(({ StackName, TemplateDiff, Parameters, OldTemplate, Changes }) => (
               <div className="row pt-2 pb-4" key={StackName}>
                 <div className="col">
                   <h4 className="pb-2 pl-3">
@@ -115,10 +115,10 @@ class PipelineChanges extends Component {
                   </h4>
                   <Collapse>
                     <CollapseBody label="Change Set">
-                      <ChangeSetTable set={ChangeSets} />
+                      <ChangeSetTable set={Changes} />
                     </CollapseBody>
                     <CollapseBody label="Parameters">
-                      <ParametersTable set={ParameterDiff} />
+                      <ParametersTable set={Parameters} />
                     </CollapseBody>
                     <CollapseBody label="Template">
                       <Diff diff={TemplateDiff} source={OldTemplate} />
