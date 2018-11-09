@@ -1,5 +1,6 @@
 const path = require('path');
 const HTML = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -17,9 +18,7 @@ module.exports = {
     extensions: ['.jsx', '.js', '.json', '.scss'],
     modules: [
       path.resolve(__dirname, 'src'),
-      path.resolve(__dirname, 'src', 'lib'),
       path.resolve(__dirname, 'node_modules'),
-      'node_modules',
     ],
   },
   module: {
@@ -38,7 +37,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader'],
       },
       {
         test: /\.svg$/,
@@ -57,6 +56,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.optimize.MinChunkSizePlugin({
+      minChunkSize: 50000,
+    }),
+    new webpack.ProvidePlugin({
+      sjcl: 'sjcl/core/sjcl',
+    }),
     new HTML({
       minify: {
         minifyCSS: true,

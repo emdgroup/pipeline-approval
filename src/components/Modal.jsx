@@ -87,3 +87,60 @@ Modal.defaultProps = {
   title: '',
   children: null,
 };
+
+export const RejectModal = ({ handleKey, close, onClick }) => (
+  <Modal title="Reject Reason" onClose={close}>
+    <ModalBody>
+      <div className="form-group">
+        <textarea
+          className="form-control w-100"
+          name="rejectReason"
+          rows="3"
+          required="required"
+          onChange={handleKey}
+        />
+      </div>
+    </ModalBody>
+    <ModalFooter>
+      <Button onClick={close} look="light">
+        Cancel
+      </Button>
+      <Button onClick={onClick} look="danger">
+        Reject
+      </Button>
+    </ModalFooter>
+  </Modal>
+);
+
+RejectModal.propTypes = {
+  handleKey: PropTypes.func,
+  close: PropTypes.func,
+  onClick: PropTypes.func,
+};
+
+RejectModal.defaultProps = {
+  handleKey: () => {},
+  close: () => {},
+  onClick: () => {},
+};
+
+export const ResponseModal = ({ response, close }) => (
+  <Modal title={response.title} onClose={close}>
+    <ModalBody>{response.message}</ModalBody>
+    <ModalFooter>
+      <Button onClick={close} look="light">
+        OK
+      </Button>
+    </ModalFooter>
+  </Modal>
+);
+
+ResponseModal.propTypes = {
+  response: PropTypes.objectOf(PropTypes.string),
+  close: PropTypes.func,
+};
+
+ResponseModal.defaultProps = {
+  response: null,
+  close: () => {},
+};

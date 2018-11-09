@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.350.0",
+    "aws-sdk": "^2.351.0",
     "bootstrap": "^4.1.1",
     "corejs": "^1.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
+    "react-diff-view": "^1.8.1",
     "react-dom": "^16.6.1",
     "sjcl": "^1.0.7",
     "url-lite": "^1.0.2",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-react": "^7.0.0-0",
     "babel-core": "^7.0.0-bridge.0",

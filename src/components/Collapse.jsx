@@ -1,86 +1,37 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Caret from '../../public/icons/caret.svg';
 
-const CollapseBody = (props) => {
-  const { label, onClick, isOpen, children } = props;
-  const onHeaderClick = () => {
-    onClick(label);
-  };
+export class CollapseBody extends PureComponent {
+  state = { isOpen: false };
 
-  return (
-    <div className="card">
-      <div role="tab" onClick={onHeaderClick} className="card-header position-relative">
-        <div>{label}</div>
-        <div className="float-right">
-          {isOpen ? (
-            <i className="icon-caret-up icon-rotate">
-              <Caret className="icon-caret-up" />
-            </i>
-          ) : (
-            <i className="icon-caret-up">
-              <Caret className="icon-caret-up" />
-            </i>
-          )}
+  onClick = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+
+  render() {
+    const { label, children } = this.props;
+    const { isOpen } = this.state;
+
+    return (
+      <div className="card">
+        <div role="tab" onClick={this.onClick} className="card-header position-relative">
+          <i className={isOpen ? 'icon-rotate icon-caret-up' : 'icon-caret-up'}>
+            <Caret />
+          </i>
+          <span className="pl-3">{label}</span>
+        </div>
+        <div className={isOpen ? 'collapse show' : 'collapse'}>
+          <div className="card-body">{isOpen ? children : null}</div>
         </div>
       </div>
-      <div className={!isOpen ? 'collapse' : 'collapse show'}>
-        <div className="card-body">{children}</div>
-      </div>
-    </div>
-  );
-};
-
-CollapseBody.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  label: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
-class Collapse extends Component {
-  constructor(props) {
-    super(props);
-    const { children } = this.props;
-    const openSections = {};
-    children.forEach((child) => {
-      if (child.props.isOpen) {
-        openSections[child.props.label] = true;
-      }
-    });
-    this.state = { openSections };
-  }
-
-  onClick = (label) => {
-    const { openSections } = this.state;
-
-    const isOpen = !!openSections[label];
-
-    this.setState({
-      openSections: {
-        [label]: !isOpen,
-      },
-    });
-  };
-
-  renderChildren = (child) => {
-    const { openSections } = this.state;
-    return (
-      <CollapseBody
-        key={child.props.label}
-        isOpen={!!openSections[child.props.label]}
-        label={child.props.label}
-        onClick={this.onClick}
-      >
-        {child.props.children}
-      </CollapseBody>
     );
-  };
+  }
+}
+
+class Collapse extends PureComponent {
 
   render() {
     const { children } = this.props;
-
-    return <div className="accordion">{children.map(this.renderChildren)}</div>;
+    return <div className="accordion">{children}</div>;
   }
 }
 

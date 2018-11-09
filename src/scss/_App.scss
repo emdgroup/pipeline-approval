@@ -3,26 +3,11 @@ tr > td {
   white-space: nowrap;
 }
 
-#site-view > div.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: $white;
-}
-
 body {
   position: relative;
   min-height: 100%;
   background-color: $body-bg;
-  font-size: $default-font-size;
-  line-height: 1.42857143;
   color: #333333;
-  > div.container {
-    min-height: 100%;
-    padding: 0;
-    background-color: #fff;
-    padding-bottom: $footer-height;
-  }
 }
 
 .empty-collection {
@@ -40,13 +25,24 @@ body {
 }
 
 .icon-caret-up svg {
-  position: absolute;
-  top: 20px;
-  right: 15px;
   transition: 0.4s ease-in-out;
   width: 14px;
+  height: 14px;
+  transform: rotate(-90deg);
 }
 
 .icon-rotate svg {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
+}
+
+.modal-footer {
+  background-color: $light;
+}
+
+.btn {
+  background-color: $white;
+}
+
+.card-body {
+  font-size: 0.9em;
 }
