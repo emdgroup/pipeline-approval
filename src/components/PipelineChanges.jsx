@@ -30,13 +30,10 @@ class PipelineChanges extends Component {
       .then((diff) => {
         this.setState({ diff });
         this.pipeline = CodePipeline.then(
-          Pipeline => new Pipeline.default({
-            region: diff.Pipeline.Region,
-            credentials: {
-              accessKeyId: diff.Credentials.AccessKeyId,
-              secretAccessKey: diff.Credentials.SecretAccessKey,
-              sessionToken: diff.Credentials.SessionToken,
-            },
+          Pipeline => new Pipeline.default(diff.Pipeline.Region, {
+            accessKeyId: diff.Credentials.AccessKeyId,
+            secretAccessKey: diff.Credentials.SecretAccessKey,
+            sessionToken: diff.Credentials.SessionToken,
           }),
         );
       })
@@ -47,23 +44,12 @@ class PipelineChanges extends Component {
 
   onClickAccept = async () => {
     const { diff } = this.state;
+
     const pipeline = await this.pipeline;
-    pipeline.putJobSuccessResult(
-      {
-        jobId: diff.Pipeline.JobId,
-      },
-      (err, data) => this.setState({
-        response: err
-          ? {
-            message: `Unsuccessful: ${(err, err.stack)}.`,
-            title: 'Unsuccessful Accept Response',
-          }
-          : {
-            message: `Success: Stack Accepted. ${data.status ? data.status : null}`,
-            title: 'Successful Accept Response',
-          },
-      }),
-    );
+    pipeline
+      .putJobSuccessResult(diff.Pipeline.JobId)
+      .then(res => this.setState({ success: true }))
+      .catch(err => this.setState({ success: false, error: err }));
   };
 
   onClickReject = async () => {
