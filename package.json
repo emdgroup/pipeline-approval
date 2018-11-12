@@ -10,6 +10,7 @@
     "react": "^16.6.1",
     "react-diff-view": "^1.8.1",
     "react-dom": "^16.6.1",
+    "url-lite": "^1.0.2",
     "whatwg-fetch": "^3.0.0"
   },
   "sideEffects": false,

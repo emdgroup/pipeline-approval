@@ -5,16 +5,14 @@ import Table from './Table';
 const emptyValue = '-';
 
 const ParameterDiffTableData = data => (
-  <Fragment key={data}>
-    {Object.keys(data).map(key => (
-      <Fragment key={data[key].Parameter}>
-        <tr key={data[key].Parameter + data[key].DefaultValue}>
-          <td>{data[key].Parameter ? data[key].Parameter : emptyValue}</td>
-          <td>{data[key].DefaultValue ? data[key].DefaultValue : emptyValue}</td>
-          <td className="oldValue">{data[key].NewValue ? data[key].NewValue : emptyValue}</td>
-          <td className="newValue">{data[key].OldValue ? data[key].OldValue : emptyValue}</td>
-        </tr>
-      </Fragment>
+  <Fragment>
+    {data.map(({ Name, Default, CurrentValue, NewValue }) => (
+      <tr key={Name}>
+        <td>{Name}</td>
+        <td>{Default}</td>
+        <td className="oldValue">{CurrentValue}</td>
+        <td className="newValue">{NewValue}</td>
+      </tr>
     ))}
   </Fragment>
 );

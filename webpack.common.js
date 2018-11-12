@@ -13,7 +13,6 @@ module.exports = {
   resolve: {
     alias: {
       url: 'url-lite',
-      crypto: path.resolve(__dirname, 'src', 'lib', 'crypto'),
     },
     extensions: ['.jsx', '.js', '.json', '.scss'],
     modules: [
