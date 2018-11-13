@@ -39,10 +39,10 @@ body {
   background-color: $light;
 }
 
-.btn {
-  background-color: $white;
-}
-
 .card-body {
   font-size: 0.9em;
+}
+
+.btn-outline-success, .btn-outline-danger {
+  background-color: $white;
 }
