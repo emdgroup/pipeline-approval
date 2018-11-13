@@ -1,9 +1,10 @@
 import React, { Component, Suspense } from 'react';
-import ChangeSetTable from './ChangeSets';
-import Collapse, { CollapseBody } from './Collapse';
-import { RejectModal, ResponseModal } from './Modal';
-import ParametersTable from './ParameterDiff';
-import request from '../lib/fetch_xsrf';
+import ChangeSetTable from 'components/ChangeSets';
+import Collapse, { CollapseBody } from 'components/Collapse';
+import MessageModal from 'components/Modal/Message';
+import RejectModal from 'components/Modal/Reject';
+import ParametersTable from 'components/ParameterDiff';
+import request from 'lib/fetch_xsrf';
 
 const Diff = React.lazy(() => import(/* webpackPrefetch: true */ './Diff'));
 const CodePipeline = import(/* webpackPrefetch: true */ 'lib/codepipeline');
@@ -11,9 +12,7 @@ const CodePipeline = import(/* webpackPrefetch: true */ 'lib/codepipeline');
 class PipelineChanges extends Component {
   state = {
     diff: null,
-    rejectStack: null,
-    rejectReason: null,
-    response: null,
+    error: null,
   };
 
   componentDidMount() {
@@ -38,7 +37,9 @@ class PipelineChanges extends Component {
         );
       })
       .catch((err) => {
-        console.log(err);
+        this.setState({
+          error: err.status === 403 ? 'expired' : 'unknown',
+        });
       });
   }
 
@@ -52,13 +53,12 @@ class PipelineChanges extends Component {
       .catch(err => this.setState({ success: false, error: err }));
   };
 
-  onClickReject = async () => {
-    const { rejectReason } = this.state;
+  onClickReject = async (reason) => {
     const { diff } = this.state;
 
     const pipeline = await this.pipeline;
     pipeline
-      .putJobFailureResult(diff.Pipeline.JobId, rejectReason)
+      .putJobFailureResult(diff.Pipeline.JobId, reason)
       .then(res => this.setState({ success: true }))
       .catch(err => this.setState({ success: false, error: err }));
   };
@@ -71,39 +71,33 @@ class PipelineChanges extends Component {
     />
   );
 
-  handleKey = ({ target }) => {
-    this.setState({ [target.name]: target.value });
-  };
-
   openRejectStackModal = () => this.setState({ rejectStack: true });
 
-  close = () => this.setState({ rejectStack: null, response: null });
+  close = () => this.setState({ rejectStack: null, error: null });
 
   render() {
-    const { diff, rejectStack, response } = this.state;
+    const { diff, rejectStack, response, error, success } = this.state;
 
-    if (!diff) return null;
+    const { Stacks, Pipeline } = diff || {};
 
-    const { Stacks, Pipeline } = diff;
+    console.log(error);
 
     return (
       <Suspense fallback="">
         <div className="container pb-4">
-          {response ? <ResponseModal close={this.close} response={response} /> : null}
-          {rejectStack ? (
-            <RejectModal
-              close={this.close}
-              onClick={this.onClickReject}
-              handleKey={this.handleKey}
-            />
+          {success ? (
+            <MessageModal close={this.close} message="success" />
+          ) : error ? (
+            <MessageModal close={this.close} message={error} />
+          ) : rejectStack ? (
+            <RejectModal close={this.close} onSubmit={this.onClickReject} />
           ) : null}
           {Stacks
             ? Stacks.map(({ StackName, TemplateDiff, Parameters, OldTemplate, Changes }) => (
               <div className="row pt-2 pb-4" key={StackName}>
                 <div className="col">
-                  <h4 className="pb-2 pl-3">
-                      Stack{' '}
-                    <a
+                  <Collapse>
+                    <CollapseBody label={<a
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`https://${
@@ -111,9 +105,7 @@ class PipelineChanges extends Component {
                       }.console.aws.amazon.com/cloudformation/home#/stacks`}
                     >
                       {StackName}
-                    </a>
-                  </h4>
-                  <Collapse>
+                    </a>} />
                     <CollapseBody label="Change Set">
                       <ChangeSetTable set={Changes} />
                     </CollapseBody>

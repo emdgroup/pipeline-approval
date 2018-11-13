@@ -58,11 +58,8 @@ class ParameterDiff extends Component {
 }
 
 ParameterDiff.propTypes = {
-  set: PropTypes.objectOf(PropTypes.any),
+  set: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
-ParameterDiff.defaultProps = {
-  set: {},
-};
 
 export default ParameterDiff;

@@ -56,15 +56,17 @@ export class Modal extends PureComponent {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{title}</h5>
-                <button
-                  type="button"
-                  className="close"
-                  aria-label={buttons.CLOSE}
-                  value="CLOSE"
-                  onClick={onClose}
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                {onClose ? (
+                  <button
+                    type="button"
+                    className="close"
+                    aria-label={buttons.CLOSE}
+                    value="CLOSE"
+                    onClick={onClose}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                ) : null}
               </div>
               {children}
             </div>
@@ -83,64 +85,7 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
-  onClose: () => {},
+  onClose: null,
   title: '',
   children: null,
-};
-
-export const RejectModal = ({ handleKey, close, onClick }) => (
-  <Modal title="Reject Reason" onClose={close}>
-    <ModalBody>
-      <div className="form-group">
-        <textarea
-          className="form-control w-100"
-          name="rejectReason"
-          rows="3"
-          required="required"
-          onChange={handleKey}
-        />
-      </div>
-    </ModalBody>
-    <ModalFooter>
-      <Button onClick={close} look="light">
-        Cancel
-      </Button>
-      <Button onClick={onClick} look="danger">
-        Reject
-      </Button>
-    </ModalFooter>
-  </Modal>
-);
-
-RejectModal.propTypes = {
-  handleKey: PropTypes.func,
-  close: PropTypes.func,
-  onClick: PropTypes.func,
-};
-
-RejectModal.defaultProps = {
-  handleKey: () => {},
-  close: () => {},
-  onClick: () => {},
-};
-
-export const ResponseModal = ({ response, close }) => (
-  <Modal title={response.title} onClose={close}>
-    <ModalBody>{response.message}</ModalBody>
-    <ModalFooter>
-      <Button onClick={close} look="light">
-        OK
-      </Button>
-    </ModalFooter>
-  </Modal>
-);
-
-ResponseModal.propTypes = {
-  response: PropTypes.objectOf(PropTypes.string),
-  close: PropTypes.func,
-};
-
-ResponseModal.defaultProps = {
-  response: null,
-  close: () => {},
 };
