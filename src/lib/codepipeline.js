@@ -1,31 +1,47 @@
-import CodePipeline from 'aws-sdk/clients/codepipeline';
+import aws4 from 'aws4-tiny';
 
 export default class {
   constructor(region, credentials) {
-    this.client = new CodePipeline({ region, credentials });
+    this.region = region;
+    this.credentials = credentials;
   }
 
-  promisify(action, args) {
-    return new Promise((resolve, reject) => {
-      this.client[action](args, (err, res) => {
-        if (err) {
-          const errString = err.code === 'ExpiredTokenException' ? 'expired' : 'unkown';
-          reject(errString);
+  request(action, args) {
+    return aws4
+      .fetch(
+        {
+          service: 'codepipeline',
+          region: this.region,
+          headers: {
+            'X-Amz-Target': `CodePipeline_20150709.${action}`,
+            'Content-Type': 'application/x-amz-json-1.1',
+          },
+          body: JSON.stringify(args),
+        },
+        this.credentials,
+      )
+      .then((res) => {
+        if (res.ok) return res.json();
+        if (res.status === 400) {
+          return res.json().then((err) => {
+            const error = new Error(err.message);
+            error.code = err.__type;
+            return Promise.reject(error);
+          });
         }
-        else resolve(res);
+        return Promise.reject(res);
       });
-    });
   }
 
   putJobFailureResult(jobId, message) {
-    return this.promisify('putJobFailureResult', {
+    return this.request('PutJobFailureResult', {
       jobId,
       failureDetails: { message, type: 'JobFailed' },
     });
   }
 
   putJobSuccessResult(jobId) {
-    return this.promisify('putJobSuccessResult', {
+    return this.request('PutJobSuccessResult', {
       jobId,
     });
   }

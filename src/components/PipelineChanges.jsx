@@ -5,9 +5,9 @@ import MessageModal from 'components/Modal/Message';
 import RejectModal from 'components/Modal/Reject';
 import ParametersTable from 'components/ParameterDiff';
 import request from 'lib/fetch_xsrf';
+import CodePipeline from 'lib/codepipeline';
 
 const Diff = React.lazy(() => import(/* webpackPrefetch: true */ './Diff'));
-const CodePipeline = import(/* webpackPrefetch: true */ 'lib/codepipeline');
 
 class PipelineChanges extends Component {
   state = {
@@ -28,13 +28,11 @@ class PipelineChanges extends Component {
     request(`https://${bucket}.s3.amazonaws.com/${key}?${search}`)
       .then((diff) => {
         this.setState({ diff });
-        this.pipeline = CodePipeline.then(
-          Pipeline => new Pipeline.default(diff.Pipeline.Region, {
-            accessKeyId: diff.Credentials.AccessKeyId,
-            secretAccessKey: diff.Credentials.SecretAccessKey,
-            sessionToken: diff.Credentials.SessionToken,
-          }),
-        );
+        this.pipeline = new CodePipeline(diff.Pipeline.Region, {
+          accessKeyId: diff.Credentials.AccessKeyId,
+          secretAccessKey: diff.Credentials.SecretAccessKey,
+          sessionToken: diff.Credentials.SessionToken,
+        });
       })
       .catch((err) => {
         this.setState({
@@ -43,21 +41,19 @@ class PipelineChanges extends Component {
       });
   }
 
-  onClickAccept = async () => {
+  onClickAccept = () => {
     const { diff } = this.state;
 
-    const pipeline = await this.pipeline;
-    pipeline
+    this.pipeline
       .putJobSuccessResult(diff.Pipeline.JobId)
       .then(res => this.setState({ success: true }))
       .catch(err => this.setState({ success: false, error: err }));
   };
 
-  onClickReject = async (reason) => {
+  onClickReject = (reason) => {
     const { diff } = this.state;
 
-    const pipeline = await this.pipeline;
-    pipeline
+    this.pipeline
       .putJobFailureResult(diff.Pipeline.JobId, reason)
       .then(res => this.setState({ success: true }))
       .catch(err => this.setState({ success: false, error: err }));
@@ -97,15 +93,19 @@ class PipelineChanges extends Component {
               <div className="row pt-2 pb-4" key={StackName}>
                 <div className="col">
                   <Collapse>
-                    <CollapseBody label={<a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`https://${
-                        Pipeline.Region
-                      }.console.aws.amazon.com/cloudformation/home#/stacks`}
-                    >
-                      {StackName}
-                    </a>} />
+                    <CollapseBody
+                      label={(
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={`https://${
+                            Pipeline.Region
+                          }.console.aws.amazon.com/cloudformation/home#/stacks`}
+                        >
+                          {StackName}
+                        </a>
+)}
+                    />
                     <CollapseBody label="Change Set">
                       <ChangeSetTable set={Changes} />
                     </CollapseBody>
