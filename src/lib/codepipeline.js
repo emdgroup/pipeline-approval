@@ -24,12 +24,11 @@ export default class {
         if (res.ok) return res.json();
         if (res.status === 400) {
           return res.json().then((err) => {
-            const error = new Error(err.message);
-            error.code = err.__type;
-            return Promise.reject(error);
+            const errString = err.__type === 'ExpiredTokenException' ? 'expired' : 'unkown';
+            return Promise.reject(errString);
           });
         }
-        return Promise.reject(res);
+        return Promise.reject('unkown');
       });
   }
 
