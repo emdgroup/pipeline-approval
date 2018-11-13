@@ -4415,18 +4415,6 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: transparent;
   border: 0; }
 
-.shadow-sm {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
-
-.shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; }
-
-.shadow-lg {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; }
-
-.shadow-none {
-  box-shadow: none !important; }
-
 tr > th,
 tr > td {
   white-space: nowrap; }
@@ -4460,11 +4448,11 @@ body {
 .modal-footer {
   background-color: #f8f9fa; }
 
-.btn {
-  background-color: #fff; }
-
 .card-body {
   font-size: 0.9em; }
 
+.btn-outline-success, .btn-outline-danger {
+  background-color: #fff; }
 
-/*# sourceMappingURL=main.4fa90d8fe62845bb7b34.css.map*/
+
+/*# sourceMappingURL=main.5dbd9f31e5d58ad9691e.css.map*/
