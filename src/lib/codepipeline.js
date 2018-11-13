@@ -8,7 +8,10 @@ export default class {
   promisify(action, args) {
     return new Promise((resolve, reject) => {
       this.client[action](args, (err, res) => {
-        if (err) reject(err);
+        if (err) {
+          const errString = err.code === 'ExpiredTokenException' ? 'expired' : 'unkown';
+          reject(errString);
+        }
         else resolve(res);
       });
     });
