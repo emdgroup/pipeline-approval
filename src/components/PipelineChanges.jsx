@@ -25,7 +25,7 @@ class PipelineChanges extends Component {
       .split(/\//)
       .slice(2)
       .join('/');
-    request(`https://${bucket}.s3.amazonaws.com/${key}?${search}`)
+    request(`https://${bucket}/${key}?${search}`)
       .then((diff) => {
         this.setState({ diff });
         this.pipeline = new CodePipeline(diff.Pipeline.Region, {
@@ -75,8 +75,6 @@ class PipelineChanges extends Component {
     const { diff, rejectStack, response, error, success } = this.state;
 
     const { Stacks, Pipeline } = diff || {};
-
-    console.log(error);
 
     return (
       <Fragment>

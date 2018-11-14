@@ -36,7 +36,7 @@ export class Modal extends PureComponent {
 
   checkDocumentClick = (event) => {
     const { onClose } = this.props;
-    if (this.dialogNode && this.dialogNode.current === event.target) onClose();
+    if (onClose && this.dialogNode && this.dialogNode.current === event.target) onClose();
   };
 
   render() {
