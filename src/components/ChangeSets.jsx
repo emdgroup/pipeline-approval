@@ -4,52 +4,39 @@ import Table from './Table';
 
 const emptyValue = '-';
 
-const ChangeSetsTableData = (data) => {
-  const getBadge = (action) => {
-    switch (action) {
-      case 'Add':
-        return 'badge-success';
-      case 'Remove':
-        return 'badge-danger';
-      case 'Modify':
-        return 'badge-warning';
-      default:
-        return 'badge-light';
-    }
-  };
+const getBadge = (action) => {
+  switch (action) {
+    case 'Add':
+      return 'badge-success';
+    case 'Remove':
+      return 'badge-danger';
+    case 'Modify':
+      return 'badge-info';
+    case 'Replace':
+      return 'badge-warning';
+    default:
+      return 'badge-light';
+  }
+};
+
+const ChangeSetsTableData = ({ ResourceChange }) => {
+  const action = ResourceChange.Replacement ? 'Replace' : ResourceChange.Action;
   return (
-    <Fragment
-      key={
-        data.ResourceChange.LogicalResourceId
-        + data.ResourceChange.ResourceType
-        + data.ResourceChange.Action
-      }
-    >
-      <tr key={data.ResourceChange.PhysicalResourceId + data.ResourceChange.ResourceType}>
+    <Fragment key={ResourceChange.LogicalResourceId}>
+      <tr key={ResourceChange.PhysicalResourceId + ResourceChange.ResourceType}>
         <td>
-          <span className={`badge ${getBadge(data.ResourceChange.Action)}`}>
-            {data.ResourceChange.Action ? data.ResourceChange.Action : emptyValue}
-          </span>
+          <span className={`badge ${getBadge(action)}`}>{action || emptyValue}</span>
         </td>
-        <td>
-          {data.ResourceChange.LogicalResourceId
-            ? data.ResourceChange.LogicalResourceId
-            : emptyValue}
-        </td>
-        <td>
-          {data.ResourceChange.PhysicalResourceId
-            ? data.ResourceChange.PhysicalResourceId
-            : emptyValue}
-        </td>
-        <td>{data.ResourceChange.ResourceType ? data.ResourceChange.ResourceType : emptyValue}</td>
-        <td>{data.ResourceChange.Replacement ? data.ResourceChange.Replacement : emptyValue}</td>
+        <td>{ResourceChange.LogicalResourceId || emptyValue}</td>
+        <td>{ResourceChange.PhysicalResourceId || emptyValue}</td>
+        <td>{ResourceChange.ResourceType || emptyValue}</td>
       </tr>
     </Fragment>
   );
 };
 
 class ChangeSets extends Component {
-  static headers = ['Action', 'Logical ID', 'Physical ID', 'Resource Type', 'Replacement'];
+  static headers = ['Action', 'Logical ID', 'Physical ID', 'Resource Type'];
 
   render() {
     const { set } = this.props;
