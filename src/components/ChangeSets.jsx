@@ -20,7 +20,7 @@ const getBadge = (action) => {
 };
 
 const ChangeSetsTableData = ({ ResourceChange }) => {
-  const action = ResourceChange.Replacement ? 'Replace' : ResourceChange.Action;
+  const action = ResourceChange.Replacement === 'True' ? 'Replace' : ResourceChange.Action;
   return (
     <Fragment key={ResourceChange.LogicalResourceId}>
       <tr key={ResourceChange.PhysicalResourceId + ResourceChange.ResourceType}>
