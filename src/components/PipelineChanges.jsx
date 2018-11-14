@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component, Fragment, Suspense } from 'react';
 import ChangeSetTable from 'components/ChangeSets';
 import Collapse, { CollapseBody } from 'components/Collapse';
 import MessageModal from 'components/Modal/Message';
