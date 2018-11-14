@@ -21,7 +21,7 @@ export default class {
         this.credentials,
       )
       .then((res) => {
-        if (res.ok) return res.json();
+        if (res.ok) return res.text().then(body => (body.length ? JSON.parse(body) : null));
         if (res.status === 400) {
           return res.json().then((err) => {
             const errString = err.__type === 'ExpiredTokenException' ? 'expired' : 'unkown';
