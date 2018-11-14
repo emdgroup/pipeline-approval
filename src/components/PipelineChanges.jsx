@@ -79,7 +79,7 @@ class PipelineChanges extends Component {
     console.log(error);
 
     return (
-      <Suspense fallback="">
+      <Fragment>
         <div className="container pb-4">
           {success ? (
             <MessageModal close={this.close} message="success" />
@@ -113,7 +113,9 @@ class PipelineChanges extends Component {
                       <ParametersTable set={Parameters} />
                     </CollapseBody>
                     <CollapseBody label="Template">
-                      <Diff diff={TemplateDiff} source={OldTemplate} />
+                      <Suspense fallback="Loading...">
+                        <Diff diff={TemplateDiff} source={OldTemplate} />
+                      </Suspense>
                     </CollapseBody>
                   </Collapse>
                 </div>
@@ -141,7 +143,7 @@ class PipelineChanges extends Component {
             </div>
           </div>
         </div>
-      </Suspense>
+      </Fragment>
     );
   }
 }
