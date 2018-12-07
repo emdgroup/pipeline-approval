@@ -1,15 +1,21 @@
 [![Build Status](https://img.shields.io/travis/emdgroup/pipeline-approval/master.svg?style=flat-square)](https://travis-ci.org/emdgroup/pipeline-approval) [![GitHub license](https://img.shields.io/github/license/emdgroup/pipeline-approval.svg?style=flat-square)](https://github.com/emdgroup/pipeline-approval/blob/master/LICENSE) [![sponsored by](https://img.shields.io/badge/sponsored%20by-emdgroup.com-ff55aa.svg?style=flat-square)](http://emdgroup.com)
 
+# pipeline-approval
+
 Drop-in replacement for the manual approval step that CodePipeline provides.
+
+## Features
 
 * Auto-approves if no changes have been identified
 * Generates temporary URL to approval web site that doesn't require AWS Console login (great for approving from mobile)
 * Summarizes changes to multiple stacks on a single page
-  * Presents `diff` of current to new template
+  * Presents `diff` between current and new template
   * All macros and transforms will be resolved at this stage
   * Highlights changes in parameter values
   * Displays full CloudFormation ChangeSet information
 * Approvals can require multiple approvers
+
+## Setup
 
 **Step 1: Implement ChangeSets in Pipeline**
 
@@ -107,6 +113,8 @@ This policy statement is required to provde the necessary permissions to the pip
 
 **Step 5: Replace Manual Approval Step with Lambda**
 
+`UserParameters` needs to be string so we wrap it in a `!Sub` to be able to reference parameters. It accepts a `Stacks` parameter which is a list of CloudFormation stacks that will be checked for changes. The `TopicArn` parameter is required. The URL to the approval page is publised to this topic.
+
 ```yaml
 - Name: ApproveChangeSet
   ActionTypeId:
@@ -116,8 +124,6 @@ This policy statement is required to provde the necessary permissions to the pip
     Provider: Lambda
   Configuration:
     FunctionName: !ImportValue approval-lambda:FunctionArn
-    # UserParameters needs to be string so we wrap it in a !Sub to be able to
-    # reference parameters.
     UserParameters: !Sub |
       Stacks:
         - ${ProdStackName}
