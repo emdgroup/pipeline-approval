@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Table from './Table';
 
@@ -19,41 +19,36 @@ const getBadge = (action) => {
   }
 };
 
-const ChangeSetsTableData = ({ ResourceChange }) => {
-  const action = ResourceChange.Replacement === 'True' ? 'Replace' : ResourceChange.Action;
+const Row = ({
+  Replacement,
+  Action,
+  ResourceType,
+  LogicalResourceId,
+  PhysicalResourceId,
+}) => {
+  const action = Replacement === 'True' ? 'Replace' : Action;
   return (
-    <Fragment key={ResourceChange.LogicalResourceId}>
-      <tr key={ResourceChange.PhysicalResourceId + ResourceChange.ResourceType}>
-        <td>
-          <span className={`badge ${getBadge(action)}`}>{action || emptyValue}</span>
-        </td>
-        <td>{ResourceChange.LogicalResourceId || emptyValue}</td>
-        <td>{ResourceChange.PhysicalResourceId || emptyValue}</td>
-        <td>{ResourceChange.ResourceType || emptyValue}</td>
-      </tr>
-    </Fragment>
+    <tr>
+      <td>
+        <span className={`badge ${getBadge(action)}`}>{action}</span>
+      </td>
+      <td>{LogicalResourceId}</td>
+      <td>{PhysicalResourceId || emptyValue}</td>
+      <td>{ResourceType}</td>
+    </tr>
   );
 };
 
-class ChangeSets extends Component {
-  static headers = ['Action', 'Logical ID', 'Physical ID', 'Resource Type'];
+const headers = ['Action', 'Logical ID', 'Physical ID', 'Resource Type'];
 
-  render() {
-    const { set } = this.props;
-    return (
-      <Fragment>
-        <Table headers={ChangeSets.headers} renderData={ChangeSetsTableData} data={set} render />
-      </Fragment>
-    );
-  }
+export default function ({ set }) {
+  return (
+    <Table headers={headers}>
+      <tbody>
+        {set.map(({ ResourceChange }) => (
+          <Row key={ResourceChange.LogicalResourceId} {...ResourceChange} />
+        ))}
+      </tbody>
+    </Table>
+  );
 }
-
-ChangeSets.propTypes = {
-  set: PropTypes.arrayOf(PropTypes.any),
-};
-
-ChangeSets.defaultProps = {
-  set: [],
-};
-
-export default ChangeSets;

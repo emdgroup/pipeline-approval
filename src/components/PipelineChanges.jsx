@@ -72,7 +72,7 @@ class PipelineChanges extends Component {
   close = () => this.setState({ rejectStack: null, error: null });
 
   render() {
-    const { diff, rejectStack, response, error, success } = this.state;
+    const { diff, rejectStack, error, success } = this.state;
 
     const { Stacks, Pipeline } = diff || {};
 
@@ -108,7 +108,7 @@ class PipelineChanges extends Component {
                       <ChangeSetTable set={Changes} />
                     </CollapseBody>
                     <CollapseBody label="Parameters">
-                      <ParametersTable set={Parameters} />
+                      <ParametersTable data={Parameters} />
                     </CollapseBody>
                     <CollapseBody label="Template">
                       <Suspense fallback="Loading...">
