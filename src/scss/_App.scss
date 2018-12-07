@@ -16,12 +16,17 @@ body {
   font-size: 20px;
 }
 
-.oldValue {
-  color: red;
+.diff {
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  color: #24292e;
 }
 
-.newValue {
-  color: green;
+.diff-remove {
+  background-color: #fadde0;
+}
+
+.diff-add {
+  background-color: #d6fedb;
 }
 
 .icon-caret-up svg {
