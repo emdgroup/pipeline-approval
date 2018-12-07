@@ -4430,11 +4430,15 @@ body {
   text-align: center;
   font-size: 20px; }
 
-.oldValue {
-  color: red; }
+.diff {
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  color: #24292e; }
 
-.newValue {
-  color: green; }
+.diff-remove {
+  background-color: #fadde0; }
+
+.diff-add {
+  background-color: #d6fedb; }
 
 .icon-caret-up svg {
   transition: 0.4s ease-in-out;
@@ -4455,4 +4459,4 @@ body {
   background-color: #fff; }
 
 
-/*# sourceMappingURL=main.5dbd9f31e5d58ad9691e.css.map*/
+/*# sourceMappingURL=main.7774901702dbb328eea2.css.map*/
