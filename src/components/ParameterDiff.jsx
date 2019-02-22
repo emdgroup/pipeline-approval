@@ -17,7 +17,7 @@ export default function ({ data }) {
         {filtered.map(({ Name, Default, CurrentValue, NewValue }) => (
           <tr key={Name}>
             <td className="font-weight-bold">{Name}</td>
-            <td className="diff">
+            <td className="diff w-auto">
               {diffWords(
                 CurrentValue === null ? Default === null ? '' : Default : CurrentValue,
                 NewValue === null ? '' : NewValue,
