@@ -46,7 +46,7 @@ class PipelineChanges extends Component {
 
     this.pipeline
       .putJobSuccessResult(diff.Pipeline.JobId)
-      .then(res => this.setState({ success: true }))
+      .then(() => this.setState({ success: true }))
       .catch(err => this.setState({ success: false, error: err }));
   };
 
@@ -55,7 +55,7 @@ class PipelineChanges extends Component {
 
     this.pipeline
       .putJobFailureResult(diff.Pipeline.JobId, reason)
-      .then(res => this.setState({ success: true }))
+      .then(() => this.setState({ success: true }))
       .catch(err => this.setState({ success: false, error: err }));
   };
 
@@ -76,8 +76,26 @@ class PipelineChanges extends Component {
 
     const { Stacks, Pipeline } = diff || {};
 
+    if (!Pipeline) return null;
+
     return (
       <Fragment>
+        <div className="container p-4">
+          <h2>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${
+                Pipeline.Region
+              }.console.aws.amazon.com/codesuite/codepipeline/pipelines/${
+                Pipeline.PipelineName
+              }/view`}
+            >
+              {Pipeline.PipelineName}
+            </a>{' '}
+            ({Pipeline.Region})
+          </h2>
+        </div>
         <div className="container pb-4">
           {success ? (
             <MessageModal close={this.close} message="success" />
