@@ -9,7 +9,7 @@
     "diff": "^4.0.1",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
-    "react-diff-view": "^1.8.1",
+    "react-diff-view": "^2.0.2",
     "react-dom": "^16.6.3",
     "url-lite": "^1.0.2",
     "whatwg-fetch": "^3.0.0"
