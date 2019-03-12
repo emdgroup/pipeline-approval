@@ -11,6 +11,7 @@
     "react": "^16.6.3",
     "react-diff-view": "^2.0.2",
     "react-dom": "^16.6.3",
+    "refractor": "^2.7.0",
     "url-lite": "^1.0.2",
     "whatwg-fetch": "^3.0.0"
   },
