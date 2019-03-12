@@ -1,74 +1,3 @@
-.diff-line {
-  line-height: 1.5;
-  font-family: Consolas,Courier,monospace; }
-
-.diff-gutter > a {
-  color: inherit;
-  display: block; }
-
-.diff-gutter:empty, .diff-gutter > a {
-  padding: 0 1ch;
-  text-align: right;
-  cursor: pointer;
-  user-select: none; }
-
-.diff-gutter:empty:before, .diff-gutter > a:before {
-  content: attr(data-line-number); }
-
-.diff-gutter-insert {
-  background-color: #d6fedb; }
-
-.diff-gutter-delete {
-  background-color: #fadde0; }
-
-.diff-gutter-omit {
-  cursor: default; }
-
-.diff-gutter-selected {
-  background-color: #fef6b9; }
-
-.diff-code {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-  padding: 0;
-  padding-left: .5em; }
-
-.diff-code-text {
-  cursor: text; }
-
-.diff-code-insert {
-  background-color: #eaffee; }
-
-.diff-code-edit {
-  color: inherit; }
-
-.diff-code-insert .diff-code-edit {
-  background-color: #c0dc91; }
-
-.diff-code-delete {
-  background-color: #fdeff0; }
-
-.diff-code-delete .diff-code-edit {
-  background-color: #f39ea2; }
-
-.diff-code-selected {
-  background-color: #fffce0; }
-
-.diff-omit {
-  background-color: #fafbfc; }
-
-.diff-widget-content {
-  vertical-align: top; }
-
-.diff-hunk-header {
-  line-height: 1.5;
-  user-select: none; }
-
-.diff-hunk-header-content {
-  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
-  padding: 0; }
-
 .diff {
   table-layout: fixed;
   border-collapse: collapse;
@@ -91,7 +20,167 @@
   background-color: #cb2a1d; }
 
 .diff td {
+  vertical-align: top;
+  padding-top: 0;
+  padding-bottom: 0; }
+
+.diff-decoration {
+  line-height: 1.5;
+  user-select: none; }
+
+.diff-decoration-content {
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  padding: 0; }
+
+.diff-widget-content {
   vertical-align: top; }
+
+.diff-line {
+  line-height: 1.5;
+  font-family: Consolas,Courier,monospace; }
+
+.diff-gutter > a {
+  color: inherit;
+  display: block; }
+
+.diff-gutter, .diff-gutter > a {
+  padding: 0 1ch;
+  text-align: right;
+  cursor: pointer;
+  user-select: none; }
+
+.diff-gutter-insert {
+  background-color: #d6fedb; }
+
+.diff-gutter-delete {
+  background-color: #fadde0; }
+
+.diff-gutter-omit {
+  cursor: default; }
+
+.diff-gutter-selected {
+  background-color: #fef6b9; }
+
+.diff-code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 0;
+  padding-left: .5em; }
+
+.diff-code-insert {
+  background-color: #eaffee; }
+
+.diff-code-edit {
+  display: inline-block;
+  color: inherit; }
+
+.diff-code-insert .diff-code-edit {
+  background-color: #c0dc91; }
+
+.diff-code-delete {
+  background-color: #fdeff0; }
+
+.diff-code-delete .diff-code-edit {
+  background-color: #f39ea2; }
+
+.diff-code-selected {
+  background-color: #fffce0; }
+
+.diff-omit {
+  background-color: #fafbfc; }
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #999; }
+
+.token.namespace {
+  opacity: 0.7; }
+
+.token.string {
+  color: #028265; }
+
+.token.attr-value,
+.token.punctuation,
+.token.operator {
+  color: #000; }
+
+.token.url,
+.token.symbol,
+.token.boolean,
+.token.variable,
+.token.constant,
+.token.inserted {
+  color: #36acaa; }
+
+.token.atrule,
+.language-autohotkey .token.selector,
+.language-json .token.boolean,
+code[class*='language-css'] {
+  font-weight: 600; }
+
+.language-json .token.boolean {
+  color: #0076ff; }
+
+.token.keyword {
+  color: #ff0078;
+  font-weight: bolder; }
+
+.token.function,
+.token.tag,
+.token.class-name,
+.token.number {
+  color: #0076ff; }
+
+.token.deleted,
+.language-autohotkey .token.tag {
+  color: #9a050f; }
+
+.token.selector,
+.language-autohotkey .token.keyword {
+  color: #00009f; }
+
+.token.important,
+.token.bold {
+  font-weight: bold; }
+
+.token.italic {
+  font-style: italic; }
+
+.language-json .token.property,
+.language-markdown .token.title {
+  color: #000;
+  font-weight: bolder; }
+
+.language-markdown .token.code {
+  color: #0076ff;
+  font-weight: normal; }
+
+.language-markdown .token.list,
+.language-markdown .token.hr {
+  color: #999; }
+
+.language-markdown .token.url {
+  color: #ff0078;
+  font-weight: bolder; }
+
+.token.selector {
+  color: #2b91af; }
+
+.token.property,
+.token.entity {
+  color: #ff0000; }
+
+.token.attr-name,
+.token.regex {
+  color: #d9931e; }
+
+.token.directive.tag .tag {
+  background: #ffff00;
+  color: #393a34; }
+
 .badge {
   display: inline-block;
   padding: 0.25em 0.4em;
@@ -4984,4 +5073,4 @@ body {
   background-color: #fff; }
 
 
-/*# sourceMappingURL=main.3361c5cd14df8fa412e6.css.map*/
+/*# sourceMappingURL=main.d6bc2608310ede9f7b7a.css.map*/
