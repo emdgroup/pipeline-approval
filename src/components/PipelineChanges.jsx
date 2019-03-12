@@ -1,13 +1,9 @@
-import React, { Component, Fragment, Suspense } from 'react';
-import ChangeSetTable from 'components/ChangeSets';
-import Collapse, { CollapseBody } from 'components/Collapse';
+import React, { Component, Fragment } from 'react';
 import MessageModal from 'components/Modal/Message';
 import RejectModal from 'components/Modal/Reject';
-import ParametersTable from 'components/ParameterDiff';
 import request from 'lib/fetch_xsrf';
 import CodePipeline from 'lib/codepipeline';
-
-const Diff = React.lazy(() => import(/* webpackPrefetch: true */ './Diff'));
+import Stack from 'components/Stack';
 
 class PipelineChanges extends Component {
   state = {
@@ -104,40 +100,7 @@ class PipelineChanges extends Component {
           ) : rejectStack ? (
             <RejectModal close={this.close} onSubmit={this.onClickReject} />
           ) : null}
-          {Stacks
-            ? Stacks.map(({ StackName, TemplateDiff, Parameters, OldTemplate, Changes }) => (
-              <div className="row pt-2 pb-4" key={StackName}>
-                <div className="col">
-                  <Collapse>
-                    <CollapseBody
-                      label={(
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={`https://${
-                            Pipeline.Region
-                          }.console.aws.amazon.com/cloudformation/home#/stacks`}
-                        >
-                          {StackName}
-                        </a>
-)}
-                    />
-                    <CollapseBody label="Change Set">
-                      <ChangeSetTable set={Changes} />
-                    </CollapseBody>
-                    <CollapseBody label="Parameters">
-                      <ParametersTable data={Parameters} />
-                    </CollapseBody>
-                    <CollapseBody label="Template">
-                      <Suspense fallback="Loading...">
-                        <Diff diff={TemplateDiff} source={OldTemplate} />
-                      </Suspense>
-                    </CollapseBody>
-                  </Collapse>
-                </div>
-              </div>
-            ))
-            : null}
+          {Stacks ? Stacks.map(s => <Stack {...s} Region={Pipeline.Region} />) : null}
         </div>
         <div className="container fixed-bottom pb-4">
           <div className="row justify-content-center">
